@@ -8,7 +8,7 @@
 """
 from setuptools import setup, find_packages
 setup(name='commlib',
-    version='1.0',
+    version='1.0.1',
     packages = find_packages(),
     description='common tools for develop',
     author='Devin',
