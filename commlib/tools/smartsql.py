@@ -411,7 +411,7 @@ def _gen_order_by_list(f_list, direct="ASC"):
 def _gen_f_list(f_list, default=None):
     if len(f_list) < 1 and default is not None:
         return default
-    return ", ".join([(f.sql if isinstance(f, Field) else f) for f in f_list])
+    return ", ".join([(f.sql if isinstance(f, Field) else "`%s`" % f) for f in f_list])
 
 def _gen_v_list(v_list, params):
     values = []
