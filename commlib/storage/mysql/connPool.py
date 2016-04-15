@@ -17,7 +17,7 @@ class connPool():
         self._db_index = 0
         init_command = 'SET time_zone="%s"' % time_zone
         for i in xrange(connections):
-            db = database.Connection(host=host, port=port, db=db_name,
+            db = database.Connection(host=host, port=int(port), db=db_name,
                                      user=user,
                                      passwd=password, charset=charset,
                                      autocommit=True,
