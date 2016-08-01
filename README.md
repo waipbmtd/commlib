@@ -1,2 +1,5 @@
 # commlib
-common tools collection 
+common tools collection
+
+###### command
+> python setup.py sdist upload
