@@ -8,7 +8,7 @@
 """
 from setuptools import setup, find_packages
 setup(name='commlib',
-    version='1.0.8',
+    version='1.0.9',
     packages = find_packages(),
     description='common tools for develop',
     author='Devin',
@@ -18,6 +18,8 @@ setup(name='commlib',
     install_requires=[
         'python-dateutil',
         'python-memcached',
-        'redis'
+        'redis',
+        'Fabric',
+        'Jinja2',
       ],
     )
