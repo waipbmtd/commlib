@@ -34,7 +34,8 @@ def delete(path='output'):
     project_path = env.PROJECT_PATH
     with cd(project_path):
         if not empty_folder(project_path):
-            run('rm -r ./*', warn_only=False)
+            run("""ls -l | grep -v logs | awk '{system("rm -rf "$9)}'""",
+                warn_only=False)
 
 
 @task

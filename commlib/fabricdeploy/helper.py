@@ -10,6 +10,7 @@
 #          By:
 # Description:
 # **************************************************************************
+import copy
 import os
 
 from fabric.contrib import files
@@ -41,18 +42,14 @@ def overwrite_template(keep_trailing_newline=False, **config):
     '''
     template_dir = config.get("template_dir", os.getcwd())
     filename = config.get("filename")
-    context = config.get("context", {})
+    context = copy.copy(config.get("context", {}))
     destination = config.get("destination")
     from jinja2 import Environment, FileSystemLoader
     jenv = Environment(loader=FileSystemLoader(template_dir),
                        keep_trailing_newline=keep_trailing_newline)
-    roles = env.effective_roles
-    if len(roles) > 1:
-        abort("指定了多个环境role[%s],模版无法匹配" % str(roles))
-    elif len(roles) == 0:
-        error("没有指定环境role")
-    tmp_context = context.get(roles[0], {})
-    text = jenv.get_template(filename).render(**tmp_context or {})
-    with open(destination, 'w') as f:
-        f.write(text)
+    extra_context = config.get("extra_context", {}).get(env.host, {})
+    context.update(**extra_context)
+    text = jenv.get_template(filename).render(**context or {})
+    with open(destination, 'wb') as f:
+        f.write(text.encode('utf-8'))
         f.flush()

@@ -10,13 +10,15 @@
 #          By:
 # Description:
 # **************************************************************************
+import copy
+
 from fabric.state import env
 from fabric.api import run, task
 from fabric.contrib import files
-from .helper import check
+from .helper import check, overwrite_template
 import os
 
-__all__ = ['activate', 'mkdir', 'configure']
+__all__ = ['activate', 'mkdir', 'configure', 'local_configure']
 
 
 @task
@@ -33,9 +35,12 @@ def upload_template(name, config):
     filename = config['filename']
     template_dir = config['template_dir']
     destination = config['destination']
-    context = config['context']
+    context = copy.copy(config['context'])
     use_jinja = config['use_jinja']
     use_sudo = config['use_sudo']
+
+    extra_context = config.get("extra_context", {}).get(env.host, {})
+    context.update(**extra_context)
     files.upload_template(
         filename=filename,
         destination=destination,
@@ -69,5 +74,17 @@ def configure(name=None):
         for name, config in configs.items():
             upload_template(name, config)
 
+@task
+def local_configure(name=None, keep_trailing_newline=False):
+    '''
+    本地配置文件更新(name=None)
+    '''
+    if name is not None:
+        config = env.LPROJECT_CONF[name]
+        overwrite_template(keep_trailing_newline, **config)
+    else:
+        configs = env.LPROJECT_CONF
+        for name, config in configs.items():
+            overwrite_template(keep_trailing_newline, **config)
 
 

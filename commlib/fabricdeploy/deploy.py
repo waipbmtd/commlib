@@ -15,7 +15,7 @@ from fabric.state import env
 from . import git, supervisor, nginx, fs, package
 
 __all__ = [
-    'deploy', 'update', 'rollback', 'restart', 'deploy_html', 'list_roles', 'command'
+    'deploy', 'update', 'rollback', 'restart', 'deplhtml2', 'list_roles', 'command'
 ]
 
 
