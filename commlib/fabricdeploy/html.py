@@ -47,8 +47,8 @@ def backup(path='output'):
     with cd(project_path):
         name = '%s-%s.tar.gz' % (
             env.PROJECT, datetime.now().strftime('%Y-%m-%d-%H'))
-        run('tar zcvf %s --exclude logs* '
-            '--exclude *.tar.gz %s/' % (name, project_path), warn_only=True)
+        run('tar zcf %s --exclude logs* '
+            '--exclude *.tar.gz .' % name, warn_only=True)
     backup_path = '~/backup/html/'
     if not files.exists(backup_path, verbose=True):
         run('mkdir -p %s' % backup_path)
@@ -86,9 +86,8 @@ def pack(path='output'):
             if os.path.isdir(os.path.join(tar_path, i)):
                 i = i + '/'
             results.append(i)
-            print(i)
         results = ' '.join(results)
-        local('tar zcvf %s.tar.gz ' % env.PROJECT + results)
+        local('tar zcf %s.tar.gz --exclude *.tar.gz ' % env.PROJECT + results)
 
 
 @task
@@ -121,7 +120,7 @@ def activate(path='output'):
     print('正在上传代码·····')
     putcode(path)
     with cd(env.PROJECT_PATH):
-        run('tar zxvf %s.tar.gz' % env.PROJECT)
+        run('tar zxf %s.tar.gz' % env.PROJECT)
         run('rm %s.tar.gz' % env.PROJECT)
     mkdir()
     print('部署成功····!')
